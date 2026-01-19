@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bio Sustinere Solutions</title>
+    <style>
+        /* --- VARIABLES Y RESET --- */
+        :root {
+            --color-primary: #e67e22; /* Naranja */
+            --color-secondary: #003b6d; /* Azul */
+            --color-accent: #27ae60; /* Verde */
+            --color-bg: #f4f6f7;
+            --color-black-line: #222; 
+            --font-main: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: var(--font-main);
+            margin: 0;
+            padding: 0;
+            color: #333;
+            line-height: 1.6;
+            background-color: var(--color-bg);
+            padding-top: 90px;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3 { margin: 0; font-weight: 700; color: var(--color-secondary); }
+        p { margin-bottom: 1rem; }
+        a { text-decoration: none; color: inherit; transition: 0.3s; }
+        ul { list-style: none; padding: 0; }
+        button { cursor: pointer; font-family: inherit; }
+        img { max-width: 100%; display: block; height: auto; }
+
+        /* Pestañas (Secciones) */
+        .page-section { display: none; opacity: 0; animation: fadeIn 0.6s forwards; }
+        .page-section.active { display: block; }
+        @keyframes fadeIn { to { opacity: 1; } }
+
+        /* CLASE PARA ANIMACIONES AL BAJAR (SCROLL) */
+        .reveal-on-scroll {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 1s ease-out;
+        }
+        .reveal-on-scroll.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .delay-100 { transition-delay: 0.1s; }
+        .delay-200 { transition-delay: 0.2s; }
+        .delay-300 { transition-delay: 0.3s; }
+
+        /* --- HEADER --- */
+        header {
+            background: rgba(255, 255, 255, 0.98);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 2000;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 5%;
+            height: 90px;
+        }
+
+        .logo-container { display: flex; align-items: center; cursor: pointer; }
+        .logo-img { height: 70px; margin-right: 15px; }
+        .logo-text { font-size: 1.4rem; font-weight: 800; color: var(--color-secondary); line-height: 1.1; }
+        .logo-text span { color: var(--color-primary); display: block; font-size: 0.8rem; letter-spacing: 2px; text-transform: uppercase; }
+
+        nav ul { display: flex; gap: 25px; align-items: center; }
+        nav a { 
+            font-weight: 600; 
+            color: var(--color-secondary); 
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            position: relative;
+        }
+        nav a:hover, nav a.active-link { color: var(--color-primary); }
+        
+        .btn-nav-config {
+            background: var(--color-primary);
+            color: white !important;
+            padding: 10px 20px;
+            border-radius: 30px;
+            transition: transform 0.2s;
+        }
+        .btn-nav-config:hover { transform: scale(1.05); background: #d35400; }
+
+        /* --- HERO GENERAL --- */
+        .hero-video-container {
+            position: relative;
+            height: calc(100vh - 90px);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+        }
+
+        .video-bg {
+            position: absolute;
+            top: 50%; left: 50%;
+            min-width: 100%; min-height: 100%;
+            width: auto; height: auto;
+            z-index: -1;
+            transform: translate(-50%, -50%);
+            object-fit: cover;
+            filter: brightness(0.6);
+        }
+
+        .hero-content {
+            z-index: 2;
+            max-width: 900px;
+            padding: 20px;
+            animation: slideUp 1s ease-out;
+        }
+
+        .hero-content h1 { 
+            font-size: 3.5rem; 
+            color: white; 
+            margin-bottom: 20px; 
+            text-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            line-height: 1.2;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.6rem;
+            color: #fff;
+            margin-bottom: 10px;
+            font-weight: 400;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.7);
+        }
+
+        .hero-small-text {
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.9);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 40px;
+            font-weight: 600;
+        }
+
+        .btn-hero-config {
+            background: var(--color-primary);
+            color: white;
+            padding: 15px 40px;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1.2rem;
+            display: inline-block;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            border: 2px solid var(--color-primary);
+            transition: all 0.3s ease;
+        }
+        .btn-hero-config:hover { 
+            background: #d35400; 
+            border-color: #d35400;
+            transform: scale(1.05);
+        }
+
+        /* --- ESTADÍSTICAS --- */
+        .stats-section { background: white; padding: 100px 20px; text-align: center; }
+        .stats-grid { display: flex; justify-content: space-around; max-width: 1200px; margin: 40px auto 0; flex-wrap: wrap; gap: 40px; }
+        .stat-item { flex: 1; min-width: 250px; }
+        
+        .stat-number { font-size: 4rem; font-weight: 800; color: var(--color-secondary); display: block; margin-bottom: 5px; }
+        .stat-label { font-size: 1rem; color: #7f8c8d; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+        .progress-bg { width: 100%; height: 8px; background: #e0e0e0; border-radius: 4px; margin-top: 15px; overflow: hidden; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, var(--color-secondary), var(--color-primary)); width: 0; transition: width 2.5s ease-out; border-radius: 4px; }
+
+        /* --- PRODUCTO NIU --- */
+        .tech-highlight { background: var(--color-secondary); color: white; padding: 60px 20px; text-align: center; }
+        .tech-highlight h2 span { color: var(--color-primary); }
+        
+        .product-split { display: flex; flex-wrap: wrap; }
+        .product-img { flex: 1; min-height: 500px; background: url('niu-interior.jpg') center/cover; }
+        .product-text { flex: 1; padding: 80px 50px; background: white; display: flex; flex-direction: column; justify-content: center; }
+
+        /* --- SECCIÓN BENEFICIOS --- */
+        .benefits-section {
+            padding: 80px 20px;
+            background: #f9f9f9;
+            text-align: center;
+        }
+        .benefits-grid {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+            max-width: 1200px;
+            margin: 40px auto;
+        }
+        .benefit-card {
+            flex: 1;
+            min-width: 300px;
+            background: white;
+            padding: 40px 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
+            border-top: 5px solid var(--color-primary);
+        }
+        .benefit-card:hover { transform: translateY(-10px); }
+        
+        /* ICONOS SVG */
+        .benefit-icon-svg {
+            width: 60px; height: 60px; margin-bottom: 20px; fill: var(--color-primary);
+        }
+
+        .benefit-card h3 { color: var(--color-secondary); margin-bottom: 15px; font-size: 1.4rem; }
+        .benefit-card p { color: #666; font-size: 1rem; line-height: 1.6; }
+
+        /* --- NUEVA SECCIÓN GALERÍA --- */
+        .gallery-section {
+            padding: 80px 20px;
+            background: white;
+            text-align: center;
+        }
+        .gallery-container {
+            max-width: 1200px;
+            margin: 40px auto 0;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        .gallery-img {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: transform 0.5s ease;
+        }
+        .gallery-container:hover .gallery-img {
+            transform: scale(1.03);
+        }
+
+
+        /* --- CONFIGURADOR --- */
+        .configurator-layout { display: flex; flex-wrap: wrap; min-height: calc(100vh - 90px); background: #fff; }
+        .config-preview { flex: 2; background: url('niu-exterior.jpg') center/cover; position: relative; min-height: 400px; }
+        .config-preview::after { content: 'MODELO NIU - 60m²'; position: absolute; bottom: 30px; left: 30px; background: rgba(0,0,0,0.7); color: white; padding: 10px 20px; font-weight: bold; border-radius: 5px; }
+        .config-controls { flex: 1; min-width: 350px; background: white; padding: 40px; box-shadow: -5px 0 20px rgba(0,0,0,0.05); display: flex; flex-direction: column; }
+        .option-group { margin-bottom: 25px; }
+        .option-label { display: flex; justify-content: space-between; align-items: center; cursor: pointer; padding: 15px; border: 2px solid #eee; border-radius: 10px; transition: 0.3s; }
+        .option-label:hover { border-color: var(--color-primary); }
+        .option-label input { transform: scale(1.5); accent-color: var(--color-primary); margin-right: 15px; }
+        .price-tag { margin-top: auto; background: var(--color-bg); padding: 20px; border-radius: 10px; text-align: center; }
+        .total-price { display: block; font-size: 2.5rem; font-weight: 800; color: var(--color-primary); }
+
+        /* --- NUESTRO ADN (SCROLL CONTROLLED) --- */
+        .dna-header { text-align: center; padding: 60px 20px 20px; }
+        .dna-container { position: relative; max-width: 1000px; margin: 40px auto; padding-bottom: 60px; }
+        
+        /* Línea de Fondo (Gris) */
+        .dna-line-bg {
+            position: absolute; left: 50%; top: 0; bottom: 0; width: 4px;
+            background: #eee;
+            transform: translateX(-50%);
+            z-index: 1;
+            border-radius: 4px;
+        }
+        
+        /* Línea de Relleno (Tricolor) */
+        .dna-line-fill {
+            position: absolute; left: 50%; top: 0; 
+            width: 4px;
+            height: 0%; 
+            background: linear-gradient(to bottom, var(--color-primary), var(--color-secondary), var(--color-accent));
+            transform: translateX(-50%);
+            z-index: 2;
+            border-radius: 4px;
+            transition: height 0.2s ease-out; 
+        }
+
+        .dna-item { display: flex; justify-content: center; margin-bottom: 70px; position: relative; }
+        
+        .dna-content { width: 42%; background: white; padding: 25px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); position: relative; z-index: 5; border: 1px solid #eee; }
+        
+        .dna-item:nth-child(odd) { justify-content: flex-start; }
+        .dna-item:nth-child(even) { justify-content: flex-end; }
+        
+        .dna-item:nth-child(odd) .dna-content { margin-left: auto; margin-right: 55%; text-align: right; }
+        .dna-item:nth-child(odd)::before {
+            content: ''; position: absolute; 
+            right: 50%; top: 50%; 
+            width: 5%; height: 50px; 
+            border-top: 3px solid var(--color-black-line);
+            border-right: 3px solid var(--color-black-line);
+            border-top-right-radius: 20px;
+            transform: translateY(-50%) translateX(4px);
+            z-index: 1;
+        }
+
+        .dna-item:nth-child(even) .dna-content { margin-right: auto; margin-left: 55%; text-align: left; }
+        .dna-item:nth-child(even)::before {
+            content: ''; position: absolute; 
+            left: 50%; top: 50%; 
+            width: 5%; height: 50px; 
+            border-top: 3px solid var(--color-black-line);
+            border-left: 3px solid var(--color-black-line);
+            border-top-left-radius: 20px;
+            transform: translateY(-50%) translateX(-4px);
+            z-index: 1;
+        }
+        
+        .dna-year { display: inline-block; background: var(--color-secondary); color: white; padding: 4px 15px; border-radius: 20px; font-weight: bold; font-size: 0.9rem; margin-bottom: 10px; }
+        
+        .dna-dot {
+            position: absolute; left: 50%; top: 50%; 
+            width: 14px; height: 14px; 
+            background: white; border: 4px solid var(--color-black-line); 
+            border-radius: 50%; z-index: 10;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 0 4px rgba(255,255,255,0.8);
+            transition: background 0.3s, border-color 0.3s;
+        }
+
+        .dna-item.active-dot .dna-dot {
+            background: var(--color-primary);
+            border-color: var(--color-primary);
+        }
+
+        /* --- CONÓCENOS --- */
+        .about-hero-container {
+            position: relative;
+            height: 500px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+        }
+
+        .about-text-container { max-width: 900px; margin: 0 auto; padding: 60px 20px; font-size: 1.1rem; text-align: justify; }
+        .about-text-container strong { color: var(--color-primary); }
+        
+        .collage-container {
+            margin: 40px auto;
+            max-width: 1000px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            border-radius: 10px;
+            overflow: hidden;
+            border: 5px solid white;
+        }
+
+        /* FOOTER */
+        footer { background: #222; color: white; text-align: center; padding: 40px; margin-top: auto; }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .hero-content h1 { font-size: 2.2rem; }
+            .hero-subtitle { font-size: 1.2rem; }
+            
+            .dna-line-bg, .dna-line-fill { left: 20px; }
+            .dna-item { justify-content: flex-start !important; margin-bottom: 40px; }
+            .dna-item .dna-content { width: 85%; margin-left: 50px !important; margin-right: 0 !important; text-align: left !important; }
+            .dna-dot { left: 20px; }
+            .dna-item::before { display: none; } 
+            
+            .configurator-layout { flex-direction: column; }
+            .config-preview { height: 300px; min-height: 300px; }
+            header { height: auto; flex-direction: column; padding: 15px; }
+            nav ul { flex-wrap: wrap; justify-content: center; margin-top: 10px; }
+            body { padding-top: 140px; }
+            .hero-video-container { height: calc(100vh - 140px); }
+            .about-hero-container { height: 300px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo-container" onclick="showTab('inicio')">
+            <img src="logo.jpg" alt="Bio Sustinere" class="logo-img">
+            <div class="logo-text">BIO <span>SUSTINERE SOLUTIONS</span></div>
+        </div>
+        <nav>
+            <ul>
+                <li><a onclick="showTab('inicio')" id="link-inicio" class="active-link">Inicio</a></li>
+                <li><a onclick="showTab('adn')" id="link-adn">Nuestro ADN</a></li>
+                <li><a onclick="showTab('conocenos')" id="link-conocenos">Conócenos</a></li>
+                <li><a onclick="showTab('configurador')" class="btn-nav-config">Configurador</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main id="inicio" class="page-section active">
+        <div class="hero-video-container">
+            <video autoplay muted loop playsinline class="video-bg">
+                <source src="video-home.mp4" type="video/mp4">
+            </video>
+            <div class="hero-content">
+                <h1>El Futuro es Autosuficiente</h1>
+                <p class="hero-subtitle">Tu hogar autosuficiente alimentado por el sol y desconectado de todas las facturas.</p>
+                <p class="hero-small-text">La Tecnología es CEO</p>
+                <button onclick="showTab('configurador')" class="btn-hero-config">Configurador</button>
+            </div>
+        </div>
+
+        <div class="stats-section reveal-on-scroll" id="stats-trigger">
+            <h2>Nuestra Evolución Sostenible</h2>
+            <p>De la electrónica industrial a la libertad energética.</p>
+            
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <span class="stat-number" data-target="54">0</span>
+                    <span class="stat-label">Años de Innovación</span>
+                    <div class="progress-bg"><div class="progress-fill" style="width: 0%" data-width="100%"></div></div>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" data-target="100">0</span>
+                    <span class="stat-label">% Autosuficiencia</span>
+                    <div class="progress-bg"><div class="progress-fill" style="width: 0%" data-width="100%"></div></div>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" data-target="8500">0</span>
+                    <span class="stat-label">Toneladas de CO2 Evitadas</span>
+                    <div class="progress-bg"><div class="progress-fill" style="width: 0%" data-width="85%"></div></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tech-highlight reveal-on-scroll">
+            <h2>Del GEO al <span>CEO</span></h2>
+            <p style="max-width: 800px; margin: 20px auto;">
+                Hemos evolucionado nuestra tecnología. El nuevo sistema <strong>CEO (Control Electrónico Optimizado)</strong> no solo gestiona la energía, sino que aprende de tus hábitos para garantizar que nunca te falte electricidad.
+            </p>
+        </div>
+
+        <div class="product-split reveal-on-scroll">
+            <div class="product-img"></div>
+            <div class="product-text">
+                <h2>Modelo NIU</h2>
+                <p>Libertad sin ataduras. Una vivienda clasificada como bien mueble que puedes colocar donde desees.</p>
+                <p>Incluye de serie la tecnología CEO y paneles solares básicos. ¿Necesitas más potencia? Configúrala a tu medida.</p>
+                <br>
+                <button onclick="showTab('configurador')" class="btn-nav-config" style="width: fit-content;">Ir al Configurador</button>
+            </div>
+        </div>
+
+        <div class="benefits-section reveal-on-scroll">
+            <h2>¿Por qué elegir Bio Sustinere?</h2>
+            <p>Tecnología punta para un confort absoluto.</p>
+            
+            <div class="benefits-grid">
+                <div class="benefit-card delay-100 reveal-on-scroll">
+                    <svg class="benefit-icon-svg" viewBox="0 0 24 24">
+                        <path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zm0 9c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58a.996.996 0 00-1.41 0 .996.996 0 000 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41L5.99 4.58zm12.37 12.37a.996.996 0 00-1.41 0 .996.996 0 000 1.41l1.06 1.06c.39.39 1.03.39 1.41 0a.996.996 0 000-1.41l-1.06-1.06zm1.06-10.96a.996.996 0 000-1.41.996.996 0 00-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06zM7.05 18.36c.39-.39.39-1.03 0-1.41a.996.996 0 00-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06z"/>
+                    </svg>
+                    <h3>Energía Sostenible y Gratuita</h3>
+                    <p>Olvídate de la factura de la luz. Nuestras casas captan y gestionan su propia energía solar para un consumo 100% autosostenible.</p>
+                </div>
+                <div class="benefit-card delay-200 reveal-on-scroll">
+                    <svg class="benefit-icon-svg" viewBox="0 0 24 24">
+                        <path d="M15 13V5c0-1.66-1.34-3-3-3S9 3.34 9 5v8c-1.21.91-2 2.37-2 4 0 2.76 2.24 5 5 5s5-2.24 5-5c0-1.63-.79-3.09-2-4zm-4-8c0-.55.45-1 1-1s1 .45 1 1v1h-2V5zm1 15c-1.66 0-3-1.34-3-3 0-1.31.84-2.41 2-2.83V9h2v5.17c1.16.42 2 1.52 2 2.83 0 1.66-1.34 3-3 3z"/>
+                    </svg>
+                    <h3>Climatización Invisible</h3>
+                    <p>Suelo radiante de alta eficiencia y aislamiento térmico para un confort perfecto todo el año. Incluye dos equipos de aerotermia de última generación.</p>
+                </div>
+                <div class="benefit-card delay-300 reveal-on-scroll">
+                    <svg class="benefit-icon-svg" viewBox="0 0 24 24">
+                        <path d="M11.53 22c-.29 0-.58-.1-.82-.29l-4.24-3.53-2.12.71c-.72.24-1.5-.12-1.74-.84L2.09 16.5c-.24-.72.12-1.5.84-1.74l2.12-.71-1.06-5.3 1.96-.39 1.06 5.3 2.12-.71L12 3.5l2.87 9.45 2.12.71 1.06-5.3 1.96.39-1.06 5.3 2.12.71c.72.24 1.08 1.02.84 1.74l-.52 1.55c-.24.72-1.02 1.08-1.74.84l-2.12-.71-4.24 3.53c-.23.19-.52.29-.82.29z"/>
+                    </svg>
+                    <h3>Cristales de Vanguardia</h3>
+                    <p>Equipada con vidrios de última tecnología (los más modernos y mejores del mercado) para garantizar aislamiento acústico y térmico superior.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="gallery-section reveal-on-scroll">
+            <h2>Diseño que se integra en tu vida</h2>
+            <p>Estética moderna, funcional y respetuosa con el entorno.</p>
+            <div class="gallery-container">
+                <img src="niu-exterior.jpg" alt="Diseño NIU" class="gallery-img">
+            </div>
+        </div>
+    </main>
+
+    <main id="configurador" class="page-section">
+        <div class="configurator-layout">
+            <div class="config-preview"></div>
+            <div class="config-controls">
+                <h2>Configura tu NIU</h2>
+                <p>Personaliza tu nivel de autonomía energética.</p>
+                <hr style="border: 0; border-top: 1px solid #eee; margin-bottom: 20px;">
+
+                <div class="option-group">
+                    <label class="option-label">
+                        <div style="display:flex; align-items:center;">
+                            <input type="checkbox" id="check-ceo" onchange="calculatePrice()">
+                            <div>
+                                <strong>CEO Extra (+Potencia)</strong><br>
+                                <span style="font-size:0.8rem; color:#666;">Control Electrónico Optimizado Adicional</span>
+                            </div>
+                        </div>
+                        <span style="font-weight:bold; color:var(--color-secondary);">+6.000€</span>
+                    </label>
+                </div>
+
+                <div class="option-group">
+                    <label class="option-label">
+                        <div style="display:flex; align-items:center;">
+                            <input type="checkbox" id="check-solar" onchange="calculatePrice()">
+                            <div>
+                                <strong>Pack Solar Pro</strong><br>
+                                <span style="font-size:0.8rem; color:#666;">10 Placas Solares Adicionales de Alta Eficiencia</span>
+                            </div>
+                        </div>
+                        <span style="font-weight:bold; color:var(--color-secondary);">+2.000€</span>
+                    </label>
+                </div>
+
+                <div class="option-group">
+                    <label class="option-label">
+                        <div style="display:flex; align-items:center;">
+                            <input type="checkbox" id="check-biodiesel" onchange="calculatePrice()">
+                            <div>
+                                <strong>Generador Biodiesel</strong><br>
+                                <span style="font-size:0.8rem; color:#666;">Respaldo energético ecológico para emergencias</span>
+                            </div>
+                        </div>
+                        <span style="font-weight:bold; color:var(--color-secondary);">+3.000€</span>
+                    </label>
+                </div>
+
+                <div class="price-tag">
+                    <span class="base-price-label">Precio Estimado</span>
+                    <span class="total-price" id="total-display">70.000€</span>
+                    <button onclick="alert('¡Presupuesto enviado! Te contactaremos pronto.')" class="btn-nav-config" style="width:100%; margin-top:15px; font-size:1.1rem;">Solicitar este Presupuesto</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <main id="adn" class="page-section">
+        <div class="dna-header">
+            <h2>El ADN de Bio Sustinere</h2>
+            <p>Una historia de evolución tecnológica hacia un mundo verde.</p>
+        </div>
+        
+        <div class="dna-container" id="dna-container">
+            <div class="dna-line-bg"></div>
+            <div class="dna-line-fill" id="dna-scroll-line"></div>
+
+            <div class="dna-item">
+                <div class="dna-dot"></div>
+                <div class="dna-content">
+                    <span class="dna-year">1801 - 1879</span>
+                    <h3>La Era de la Luz</h3>
+                    <p>Desde el arco eléctrico de Davy hasta la bombilla de Edison. La humanidad aprende a controlar la energía.</p>
+                </div>
+            </div>
+            <div class="dna-item">
+                <div class="dna-dot"></div>
+                <div class="dna-content">
+                    <span class="dna-year">1906 - 1958</span>
+                    <h3>La Revolución Electrónica</h3>
+                    <p>Nace el Tríodo, los semiconductores y el circuito integrado. Las bases de lo que hoy es nuestro sistema CEO.</p>
+                </div>
+            </div>
+            <div class="dna-item">
+                <div class="dna-dot"></div>
+                <div class="dna-content" style="border-color: var(--color-primary);">
+                    <span class="dna-year" style="background:var(--color-primary);">1971</span>
+                    <h3>NUESTRO ORIGEN</h3>
+                    <p>Comienza nuestra andadura. Desarrollamos los primeros sistemas de encendido electrónico para ahorrar combustible.</p>
+                </div>
+            </div>
+            <div class="dna-item">
+                <div class="dna-dot"></div>
+                <div class="dna-content">
+                    <span class="dna-year">1993 - 2006</span>
+                    <h3>Eficiencia LED</h3>
+                    <p>Implementamos el LED azul y sistemas de alta eficiencia. Aprendimos a iluminar más consumiendo menos.</p>
+                </div>
+            </div>
+            <div class="dna-item">
+                <div class="dna-dot"></div>
+                <div class="dna-content">
+                    <span class="dna-year">2017</span>
+                    <h3>Movilidad Sostenible</h3>
+                    <p>Lanzamiento de vehículos eléctricos y puntos de carga. Entendimos que la energía no solo debe ser eficiente, sino móvil.</p>
+                </div>
+            </div>
+            <div class="dna-item">
+                <div class="dna-dot"></div>
+                <div class="dna-content" style="border-color: var(--color-accent);">
+                    <span class="dna-year" style="background:var(--color-accent);">HOY</span>
+                    <h3>Bio Sustinere Solutions</h3>
+                    <p>Toda nuestra experiencia converge aquí. Tecnología CEO + Vivienda Modular NIU. <strong>Autosuficiencia real.</strong></p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <main id="conocenos" class="page-section">
+        <div class="about-hero-container">
+            <video autoplay muted loop playsinline class="video-bg">
+                <source src="video-conocenos.mp4" type="video/mp4">
+            </video>
+            <div class="hero-content">
+                <h1>Quiénes Somos</h1>
+                <p>Ingeniería, Innovación y Compromiso.</p>
+            </div>
+        </div>
+
+        <div class="about-text-container">
+            <h2>Más que una empresa, un legado de sostenibilidad</h2>
+            <p>En <strong>Bio Sustinere Solutions</strong>, no nacimos ayer. Somos el resultado de más de 50 años de investigación y desarrollo en el campo de la electrónica y la gestión energética. Lo que comenzó en 1971 como una búsqueda de eficiencia en sistemas eléctricos, hoy se ha transformado en un movimiento global para la <strong>autosuficiencia residencial</strong>.</p>
+            
+            <div class="collage-container">
+                <img src="collage.jpg" alt="Instalaciones Bio Sustinere" style="width:100%;">
+            </div>
+
+            <p>Muchas empresas venden casas; nosotros vendemos <strong>libertad</strong>. Nuestra tecnología <strong>CEO (Control Electrónico Optimizado)</strong> es el cerebro que nos diferencia. Mientras otros solo ponen paneles solares, nosotros integramos un sistema inteligente que gestiona cada vatio producido para que tú no tengas que preocuparte por si hace sol o está nublado.</p>
+            
+            <p>Nuestro compromiso con el medio ambiente es innegociable. Creemos en la "Beta Sostenibilidad": una mejora continua donde la tecnología sirve a la naturaleza, y no al revés. Utilizamos contenedores marítimos reciclados para nuestras estructuras NIU, reduciendo la huella de carbono de la construcción tradicional y ofreciendo un hogar robusto, moderno y, sobre todo, respetuoso con el planeta.</p>
+
+            <h3 style="margin-top:40px; color:var(--color-primary);">Nuestra Misión</h3>
+            <p>Empoderar a las personas para que vivan donde quieran, como quieran, sin facturas y sin dañar la tierra que pisan.</p>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Bio Sustinere Solutions. Tecnología CEO y Viviendas NIU.</p>
+    </footer>
+
+    <script>
+        function showTab(tabId) {
+            document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('nav a').forEach(a => a.classList.remove('active-link'));
+            
+            document.getElementById(tabId).classList.add('active');
+            
+            const link = document.getElementById('link-' + tabId);
+            if(link) link.classList.add('active-link');
+            
+            window.scrollTo(0,0);
+        }
+
+        function calculatePrice() {
+            const basePrice = 70000;
+            let finalPrice = basePrice;
+            const costCEO = 6000;
+            const costSolar = 2000;
+            const costBiodiesel = 3000;
+
+            if(document.getElementById('check-ceo').checked) finalPrice += costCEO;
+            if(document.getElementById('check-solar').checked) finalPrice += costSolar;
+            if(document.getElementById('check-biodiesel').checked) finalPrice += costBiodiesel;
+
+            document.getElementById('total-display').innerText = finalPrice.toLocaleString('es-ES') + "€";
+        }
+
+        // CONTROL DE ANIMACIONES Y SCROLL
+        const observerOptions = { threshold: 0.2 };
+
+        const onScrollObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) {
+                    
+                    // Reveal general
+                    if(entry.target.classList.contains('reveal-on-scroll')) {
+                        entry.target.classList.add('is-visible');
+                        
+                        // Si es la sección de stats, iniciar contadores SOLO AHORA
+                        if(entry.target.id === 'stats-trigger') {
+                            const statItems = entry.target.querySelectorAll('.stat-item');
+                            statItems.forEach(item => {
+                                animateNumbers(item);
+                                const bar = item.querySelector('.progress-fill');
+                                if(bar) {
+                                    const width = bar.getAttribute('data-width');
+                                    bar.style.width = width;
+                                }
+                            });
+                        }
+                    }
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal-on-scroll').forEach(el => onScrollObserver.observe(el));
+
+
+        // CONTROL DE LA LÍNEA ADN AL HACER SCROLL
+        window.addEventListener('scroll', () => {
+            const dnaContainer = document.getElementById('dna-container');
+            const dnaLine = document.getElementById('dna-scroll-line');
+            
+            if(document.getElementById('adn').classList.contains('active') && dnaContainer && dnaLine) {
+                
+                const rect = dnaContainer.getBoundingClientRect();
+                const windowHeight = window.innerHeight;
+                
+                const startPoint = windowHeight / 2;
+                
+                const scrolledPastStart = startPoint - rect.top;
+                const totalDistance = rect.height;
+
+                let percentage = (scrolledPastStart / totalDistance) * 100;
+
+                percentage = Math.max(0, Math.min(100, percentage));
+                
+                dnaLine.style.height = percentage + '%';
+
+                const items = document.querySelectorAll('.dna-item');
+                items.forEach(item => {
+                    const itemRelativeTop = (item.offsetTop / totalDistance) * 100;
+                    
+                    if (percentage > itemRelativeTop) {
+                        item.classList.add('active-dot');
+                    } else {
+                        item.classList.remove('active-dot');
+                    }
+                });
+            }
+        });
+
+        function animateNumbers(element) {
+            const numberSpan = element.querySelector('.stat-number');
+            if(!numberSpan || numberSpan.getAttribute('data-animated') === 'true') return;
+            
+            numberSpan.setAttribute('data-animated', 'true');
+
+            const target = +numberSpan.getAttribute('data-target');
+            const duration = 2000;
+            const increment = target / (duration / 20);
+            
+            let current = 0;
+            const timer = setInterval(() => {
+                current += increment;
+                if(current >= target) {
+                    numberSpan.innerText = target.toLocaleString('es-ES') + (target === 100 ? '%' : '+');
+                    clearInterval(timer);
+                } else {
+                    numberSpan.innerText = Math.ceil(current).toLocaleString('es-ES');
+                }
+            }, 20);
+        }
+    </script>
+
+</body>
+</html>
